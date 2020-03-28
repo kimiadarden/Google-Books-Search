@@ -1,0 +1,12 @@
+nav {
+    background-color: rgb(19, 155, 209)
+}
+
+a {
+    text-decoration: none;
+    color: white
+}
+
+.navbar-style {
+    font-size: 20px;
+} 

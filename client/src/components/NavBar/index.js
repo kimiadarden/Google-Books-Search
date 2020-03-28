@@ -8,7 +8,7 @@ function NavBar() {
       <div className=" container">
         <h1 className="navbar-brand" >Google Books Search</h1>
         <ul className="navbar-nav">
-          <li className="nav-item">
+          <li className="navbar-style">
             <Link
               to="/search"
               //using conditional if operator 
@@ -17,7 +17,7 @@ function NavBar() {
                 : "nav-link"}
             > Search</Link>
           </li>
-          <li className="nav-item">
+          <li className="navbar-style">
             <Link
               to="/saved"
               //using conditional if operator 
