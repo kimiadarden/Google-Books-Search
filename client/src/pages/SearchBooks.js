@@ -52,11 +52,38 @@ class SearchBooks extends React.Component {
 
   };
 
-  return (){
+  render() {
+    return (
+        <div>
+
+            <div className="container">
+                <form>
+                    <div className="form-group">
+                        <label htmlFor="search"><h2>Search for your favorite book and save them for later!</h2></label>
+                        <input
+                            onChange={this.handleInputChange}
+                            value={this.state.search}
+                            name="search"
+                            type="text"
+                            className="form-control"
+                            placeholder="What is the title of your book?"
+                            id="search"
+                        />
+                        <button onClick={this.handleFormSubmit} className="btn btn-warning mt-3 mb-5">
+                            Search
+    </button>
+                    </div>
+                </form>
+            </div>
 
 
-
-  }
+            <div className="container">
+                <h2>Results</h2>
+                <Results books={this.state.books} />
+            </div>
+        </div>
+    )
+}
       
 
 
