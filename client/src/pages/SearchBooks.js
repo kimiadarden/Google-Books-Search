@@ -1,105 +1,66 @@
 import React from "react";
 import API from "../utils/API";
+import Results from "../components/Results";
 
-function SearchBooks() {
-  // Setting our component's initial state
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
 
-  // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-  }, [])
+class SearchBooks extends React.Component {
 
-  // Loads all books and sets them to books
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
+
+  state = {
+    value: "",
+    books: []
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
+  componentDidMount() {
+    this.searchBook();
   }
+
+
+  createNewBook = bookData => {
+    return {
+      _id: bookData.id,
+      title: bookData.volumeInfo.title,
+      authors: bookData.volumeInfo.authors,
+      description: bookData.volumeInfo.description,
+      image: bookData.volumeInfo.imageLinks.thumbnail,
+      link: bookData.volumeInfo.previewLink
+    }
+  }
+
+  searchBook = query => {
+    API.getBook(query)
+      .then(res => this.setState({ books: res.data.items.map(bookData => this.createNewBook(bookData)) }))
+      .catch(err => console.error(err));
+  };
+
+
 
   // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
+  handleInputChange = event => {
     const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
+    this.setState({
+      [name]: value
+    });
+
   };
 
-  // When the form is submitted, use the API.saveBook method to save the book data
-  // Then reload books from the database
-  function handleFormSubmit(event) {
+
+  handleFormSubmit= event=> {
+
     event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
+    this.searchBook(this.state.search);
+
   };
 
-    return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-        
-            <form>
-              <Input
-                onChange={handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                onChange={handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                onChange={handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
-              <FormBtn
-                disabled={!(formObject.author && formObject.title)}
-                onClick={handleFormSubmit}
-              >
-                Submit Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-           
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
-      </Container>
-    );
+  return (){
+
+
+
   }
+      
+
+
+}
 
 
 export default SearchBooks;
